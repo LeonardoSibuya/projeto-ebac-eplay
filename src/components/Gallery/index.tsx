@@ -1,21 +1,13 @@
 import { useState } from 'react'
 
 import Section from '../Section'
+import { GalleryItem } from '../../pages/Home'
 
 import { Item, ItemsList, Action, Modal, ModalContent } from './styles'
-
-import zelda from '../../assets/images/zelda.png'
-import hogwarts from '../../assets/images/fundo_hogwarts.png'
 
 import play from '../../assets/images/play.png'
 import zoom from '../../assets/images/zoom.png'
 import fechar from '../../assets/images/fechar.png'
-
-//Interface faz o papel da tipagem com type, mas para poder ser reaproveitado em outra tipagem/interface
-interface GalleryItem {
-  type: 'image' | 'video'
-  url: string
-}
 
 //Aqui estamos extendendo/reaproveitando as propriedades da tipagem GalleryItem e acrescentando o estaVisivel: boolean
 interface ModalState extends GalleryItem {
@@ -26,25 +18,10 @@ type Props = {
   //Type apenas para dinamizar o alt das imagens
   defaultCover: string
   name: string
+  items: GalleryItem[]
 }
 
-//MOCK utilizado para simular um conteudo, e neste caso sera um conteudo com a tipagem criada acima, GalleryItem
-const mock: GalleryItem[] = [
-  {
-    type: 'image',
-    url: zelda
-  },
-  {
-    type: 'image',
-    url: hogwarts
-  },
-  {
-    type: 'video',
-    url: 'https://www.youtube.com/embed/uHGShqcAHlQ'
-  }
-]
-
-const Gallery = ({ defaultCover, name }: Props) => {
+const Gallery = ({ defaultCover, name, items }: Props) => {
   //Criamos este useState que recebe a tipagem/interface modalState criada acima, que podemos passar os estados iniciais de acordo com as propriedades do type/interface.
   //Irá fazer o mesmo papel de se tivermos criado outros useStates:
   //const [modalEstaAberto, setModalEstaAberto] = useState(false) - Para abrir e fechar o modal(IMAGEM)
@@ -81,7 +58,7 @@ const Gallery = ({ defaultCover, name }: Props) => {
       <Section title={'Galeria'} background={'black'}>
         <ItemsList>
           {/* aqui fazemos o map da const de array de objetos mock que criamos acima, e recuperamos a mídia e o index dos itens */}
-          {mock.map((media, index) => (
+          {items.map((media, index) => (
             <Item
               key={media.url}
               onClick={() => {

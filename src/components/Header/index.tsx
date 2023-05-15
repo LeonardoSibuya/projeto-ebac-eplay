@@ -1,11 +1,26 @@
+import { useDispatch, useSelector } from 'react-redux'
+
 import { Link } from 'react-router-dom'
 
-import { HeaderBar, LinkItem, Links, LinkCart } from './styles'
+import { HeaderBar, LinkItem, Links, CartButton } from './styles'
 
 import logo from '../../assets/images/logo.svg'
 import carrinho from '../../assets/images/carrinho.svg'
 
+import { open } from '../../store/reducers/cart'
+import { RootReducer } from '../../store/index'
+
 const Header = () => {
+  //aqui estamos utilizando o dispatch, para poder utilizar o reducer OPEN que criamos no reducer de cart, que no caso o estado no OPEN faz o TYPE isOpen ser TRUE, ou seja a barra lateral estara aberta
+  const dispatch = useDispatch()
+
+  //aqui estamos utilizando o useSelector para pegar o TYPE items, criado no reducer de CART, ITEMS é um array de games, que começa vazio
+  const { items } = useSelector((state: RootReducer) => state.cart)
+
+  const openCart = () => {
+    dispatch(open())
+  }
+
   return (
     <HeaderBar>
       <div>
@@ -26,9 +41,9 @@ const Header = () => {
           </Links>
         </nav>
       </div>
-      <LinkCart href="#">
-        0 - produto(s) <img src={carrinho} alt="carrinho" />
-      </LinkCart>
+      <CartButton onClick={openCart}>
+        {items.length} - produto(s) <img src={carrinho} alt="carrinho" />
+      </CartButton>
     </HeaderBar>
   )
 }

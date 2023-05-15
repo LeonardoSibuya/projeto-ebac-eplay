@@ -1,112 +1,45 @@
+import { useEffect, useState } from 'react'
+
 import ProductsList from '../../components/ProductsList'
 
-import Game from '../../models/Game'
+import { Game } from '../Home'
 
-import resident from '../../assets/images/resident.png'
-import diablo from '../../assets/images/diablo.png'
-import zelda from '../../assets/images/zelda.png'
-import startWars from '../../assets/images/star_wars.png'
-
-//Criamos estas duas consts de array para renderizar os jogos na tela, neste caso são array do tipo class Game[] que criamos na pasta models.
-const promocoes: Game[] = [
-  {
-    id: 1,
-    category: 'Ação',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis quam voluptatibus culpa obcaecati mollitia explicabo esse quidem quibusdam exercitationem voluptas ipsam sit eligendi numquam facere dolorum, aut soluta aspernatur a.',
-    title: 'Resident Evil 4',
-    system: 'windows',
-    infos: ['10%', 'R$ 250,00'],
-    image: resident
-  },
-  {
-    id: 2,
-    category: 'Ação',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis quam voluptatibus culpa obcaecati mollitia explicabo esse quidem quibusdam exercitationem voluptas ipsam sit eligendi numquam facere dolorum, aut soluta aspernatur a.',
-    title: 'Resident Evil 4',
-    system: 'PS5',
-    infos: ['5%', 'R$ 290,00'],
-    image: diablo
-  },
-  {
-    id: 3,
-    category: 'Ação',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis quam voluptatibus culpa obcaecati mollitia explicabo esse quidem quibusdam exercitationem voluptas ipsam sit eligendi numquam facere dolorum, aut soluta aspernatur a.',
-    title: 'Resident Evil 4',
-    system: 'windows',
-    infos: ['10%', 'R$ 250,00'],
-    image: zelda
-  },
-  {
-    id: 4,
-    category: 'Ação',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis quam voluptatibus culpa obcaecati mollitia explicabo esse quidem quibusdam exercitationem voluptas ipsam sit eligendi numquam facere dolorum, aut soluta aspernatur a.',
-    title: 'Resident Evil 4',
-    system: 'windows',
-    infos: ['10%', 'R$ 250,00'],
-    image: startWars
-  }
-]
-
-const emBreve: Game[] = [
-  {
-    id: 5,
-    category: 'RPG',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis quam voluptatibus culpa obcaecati mollitia explicabo esse quidem quibusdam exercitationem voluptas ipsam sit eligendi numquam facere dolorum, aut soluta aspernatur a.',
-    title: 'Diablo 4',
-    system: 'windows',
-    infos: ['17/05'],
-    image: diablo
-  },
-  {
-    id: 6,
-    category: 'RPG',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis quam voluptatibus culpa obcaecati mollitia explicabo esse quidem quibusdam exercitationem voluptas ipsam sit eligendi numquam facere dolorum, aut soluta aspernatur a.',
-    title: 'Diablo 4',
-    system: 'windows',
-    infos: ['17/05'],
-    image: diablo
-  },
-  {
-    id: 7,
-    category: 'RPG',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis quam voluptatibus culpa obcaecati mollitia explicabo esse quidem quibusdam exercitationem voluptas ipsam sit eligendi numquam facere dolorum, aut soluta aspernatur a.',
-    title: 'Diablo 4',
-    system: 'windows',
-    infos: ['17/05'],
-    image: diablo
-  },
-  {
-    id: 8,
-    category: 'RPG',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis quam voluptatibus culpa obcaecati mollitia explicabo esse quidem quibusdam exercitationem voluptas ipsam sit eligendi numquam facere dolorum, aut soluta aspernatur a.',
-    title: 'Diablo 4',
-    system: 'windows',
-    infos: ['17/05'],
-    image: diablo
-  }
-]
+import {
+  useGetAcaoQuery,
+  useGetLutaQuery,
+  useGetEsportesQuery,
+  useGetRpgQuery,
+  useGetSimulacaoQuery
+} from '../../services/api'
 
 const Categories = () => {
-  return (
-    <>
-      <ProductsList gamesArray={promocoes} title={'RPG'} background={'gray'} />
-      <ProductsList gamesArray={emBreve} title={'Ação'} background={'black'} />
-      <ProductsList
-        gamesArray={promocoes}
-        title={'Aventura'}
-        background={'gray'}
-      />
-      <ProductsList gamesArray={emBreve} title={'FPS'} background={'black'} />
-    </>
-  )
+  const { data: gamesAcao } = useGetAcaoQuery()
+  const { data: gamesLuta } = useGetLutaQuery()
+  const { data: gamesEsportes } = useGetEsportesQuery()
+  const { data: gamesRpg } = useGetRpgQuery()
+  const { data: gamesSimulacao } = useGetSimulacaoQuery()
+
+  if (gamesAcao && gamesLuta && gamesEsportes && gamesRpg && gamesSimulacao) {
+    return (
+      <>
+        <ProductsList gamesArray={gamesAcao} title="Ação" background="black" />
+        <ProductsList
+          gamesArray={gamesEsportes}
+          title="Esportes"
+          background="gray"
+        />
+        <ProductsList
+          gamesArray={gamesSimulacao}
+          title="Simulação"
+          background="black"
+        />
+        <ProductsList gamesArray={gamesLuta} title="Luta" background="gray" />
+        <ProductsList gamesArray={gamesRpg} title="Rpg" background="black" />
+      </>
+    )
+  }
+
+  return <h4>carregando</h4>
 }
 
 export default Categories
