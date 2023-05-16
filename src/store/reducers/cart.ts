@@ -23,12 +23,12 @@ const cartSlice = createSlice({
     //aqui é onde terá as funções que irão alterar o estado deste carrinho
     //Recebe o state que é o estado inicial, e a action que contem o item que iremos adicionar ao carrinho, recebendo o type PayloadAction, que recebe o type Game que criamos na page Home
     add: (state, action: PayloadAction<Game>) => {
-      //aqui criamos a const gameItem, que faz um find, para procurar se algum item que está no array de Game é igual ao item que estamos fazendo o push para este array de game, ou seja se o jogo que queremos adicionar ao carrinho é igual ao jogo que ja esta no carrinho
+      //aqui criamos a const JaEstaNoCarrinho, que faz um find, para procurar se algum item que está no array de Game é igual ao item que estamos fazendo o push para este array de game, ou seja se o jogo que queremos adicionar ao carrinho é igual ao jogo que ja esta no carrinho
       const JaEstaNoCarrinho = state.items.find(
         (jogo) => jogo.id === action.payload.id
       )
 
-      //aqui estamos falando que se gameItem for falso, ou undifined, ou seja não tem nenhum jogo igual a esse no carrinho, pode fazer o push, ou seja adicionar ao carrinho
+      //aqui estamos falando que se JaEstaNoCarrinho for falso, ou undifined, ou seja não tem nenhum jogo igual a esse no carrinho, pode fazer o push, ou seja adicionar ao carrinho
       if (!JaEstaNoCarrinho) {
         //aqui pegamos o estado do items, que inicialmente é um array vazio, e fazemos um push neste array, com o action que é o item que iremos adicionar ao carrinho, e o .payload é o conteudo que este item que sera push está recebendo, no caso de acordo com o type de Game.
         state.items.push(action.payload)

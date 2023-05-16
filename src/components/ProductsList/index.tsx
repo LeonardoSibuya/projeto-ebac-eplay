@@ -8,6 +8,7 @@ export type Props = {
   title: string
   background: 'gray' | 'black'
   gamesArray: Game[] //aqui criamos um novo tipo que recebe o type que criamos na home, onde manipula a api
+  id?: string
 }
 
 //aqui criamos uma função para formatar o preço em real: R$ XX,XX
@@ -19,7 +20,7 @@ export const formataPreco = (preco = 0) => {
   }).format(preco)
 }
 
-const ProductsList = ({ background, title, gamesArray }: Props) => {
+const ProductsList = ({ background, title, gamesArray, id }: Props) => {
   //aqui é uma função criada para coletar as infos do game e renderizar na tag, sendo o valor da promoção do game, ou a data de lançamento futuro
   const getGameTags = (jogo: Game) => {
     const tags = []
@@ -43,7 +44,7 @@ const ProductsList = ({ background, title, gamesArray }: Props) => {
   }
 
   return (
-    <Container background={background}>
+    <Container background={background} id={id}>
       <div className="container">
         <Title>{title}</Title>
         <List>

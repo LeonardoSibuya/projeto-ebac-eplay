@@ -49,11 +49,13 @@ const Home = () => {
           gamesArray={promocoes}
           title={'Promoções'}
           background={'gray'}
+          id="on-sale"
         />
         <ProductsList
           gamesArray={emBreve}
           title={'Em Breve'}
           background={'black'}
+          id="coming-soon"
         />
       </>
     )

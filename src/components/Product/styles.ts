@@ -13,6 +13,8 @@ export const Card = styled(Link)`
   text-decoration: none;
   color: ${cores.branca};
   display: block;
+  max-height: 100%;
+  height: 100%;
 
   ${TagContainer} {
     margin-right: 8px;

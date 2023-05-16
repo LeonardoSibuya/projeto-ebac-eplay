@@ -3,6 +3,8 @@ import { cores } from '../../styles'
 
 export const ItemsList = styled.ul`
   display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
 `
 
 //aqui é como se fosse um overlay, para escurecer a imagem de fundo e aparecer o icone de lupa ou de play
@@ -21,7 +23,6 @@ export const Action = styled.div`
 `
 
 export const Item = styled.li`
-  margin-right: 16px;
   position: relative;
   cursor: pointer;
 
