@@ -1,67 +1,33 @@
-import { useEffect, useState } from 'react'
-
 import Banner from '../../components/Banner'
 import ProductsList from '../../components/ProductsList'
 
 import { useGetEmBreveQuery, useGetPromocoesQuery } from '../../services/api'
 
-//Interface faz o papel da tipagem com type, mas para poder ser reaproveitado em outra tipagem/interface
-export interface GalleryItem {
-  type: 'image' | 'video'
-  url: string
-}
-
-export type Game = {
-  id: number
-  name: string
-  description: string
-  release_date?: string
-  prices: {
-    discount?: number
-    old?: number
-    current?: number
-  }
-  details: {
-    category: string
-    system: string
-    developer: string
-    publisher: string
-    languages: string[]
-  }
-  media: {
-    thumbnail: string
-    cover: string
-    gallery: GalleryItem[]
-  }
-}
-
 const Home = () => {
-  const { data: emBreve } = useGetEmBreveQuery()
-  const { data: promocoes } = useGetPromocoesQuery()
+  const { data: emBreve, isLoading: isLoadingSale } = useGetEmBreveQuery()
+  const { data: promocoes, isLoading: isLoadingSoon } = useGetPromocoesQuery()
+  //Este isLoading é da propriedade que o data da API retorna, e renomeamos para isLoadingSale e isLoadingSoon para que seja o valor do type isLoading que criamos no productList, sendo o loader das paginas
 
-  if (emBreve && promocoes) {
-    //aqui informamos que se emBreve e promocoes existirem, ai sim retorna os elementos jsx abaixo, pois eles podem ser undefined
-    return (
-      <>
-        {/* Para renderizar os arrays criados acima, o ProductList recebe a tipagem gamesArray, definido no component ProductList, e como valor que teria que receber um array, recebeu pelas consts criadas acima, sendo promocoes e emBreve. */}
-        <Banner />
-        <ProductsList
-          gamesArray={promocoes}
-          title={'Promoções'}
-          background={'gray'}
-          id="on-sale"
-        />
-        <ProductsList
-          gamesArray={emBreve}
-          title={'Em Breve'}
-          background={'black'}
-          id="coming-soon"
-        />
-      </>
-    )
-  }
-
-  return <h4>carregando</h4>
+  return (
+    <>
+      {/* Para renderizar os arrays criados acima, o ProductList recebe a tipagem gamesArray, definido no component ProductList, e como valor que teria que receber um array, recebeu pelas consts criadas acima, sendo promocoes e emBreve. */}
+      <Banner />
+      <ProductsList
+        gamesArray={promocoes}
+        title={'Promoções'}
+        background={'gray'}
+        id="on-sale"
+        isLoading={isLoadingSale}
+      />
+      <ProductsList
+        gamesArray={emBreve}
+        title={'Em Breve'}
+        background={'black'}
+        id="coming-soon"
+        isLoading={isLoadingSoon}
+      />
+    </>
+  )
 }
 
 export default Home

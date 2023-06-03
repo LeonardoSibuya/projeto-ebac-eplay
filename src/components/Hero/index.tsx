@@ -1,13 +1,12 @@
 import { useDispatch } from 'react-redux'
 
-import { Game } from '../../pages/Home'
 import Button from '../Button'
-import { formataPreco } from '../ProductsList'
 import Tag from '../Tag'
 
 import { Banner, Infos } from './styles'
 
 import { add, open } from '../../store/reducers/cart'
+import { parseToBrl } from '../../utils'
 
 type Props = {
   jogo: Game
@@ -34,11 +33,9 @@ const Hero = ({ jogo }: Props) => {
           {/* Aqui pra baixo estamos usando uma condição, como se fosse um ternario/if para renderizar o preço, desconto e o botão de adicionar o carrinho, apenas se aquela condição for verdadeira */}
           <p>
             {jogo.prices.discount && (
-              <span>De {formataPreco(jogo.prices.old)}</span>
+              <span>De {parseToBrl(jogo.prices.old)}</span>
             )}
-            {jogo.prices.current && (
-              <>Por {formataPreco(jogo.prices.current)}</>
-            )}
+            {jogo.prices.current && <>Por {parseToBrl(jogo.prices.current)}</>}
           </p>
           {jogo.prices.current && (
             <Button

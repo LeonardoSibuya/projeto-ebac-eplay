@@ -1,21 +1,24 @@
 import { useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-
-import { Game } from '../Home'
 
 import Hero from '../../components/Hero'
 import Section from '../../components/Section'
 import Gallery from '../../components/Gallery'
+import Loader from '../../components/Loader'
 
 import { useGetJogoQuery } from '../../services/api'
 
-const Product = () => {
-  const { id } = useParams() // Retorna um objeto
+//Criamos este Type para informar que o id do useParams retorna obrigatoriamente uma string e não podendo ser undefined, e eviamos ter que usar o id! como artimanha de não deixar o id ser unidefined
+type GameParams = {
+  id: string
+}
 
-  const { data: game } = useGetJogoQuery(id!) //colocamos ! depois do ID para informar que é um valor OBRIGATÓRIO, para não retornar undefined
+const Product = () => {
+  const { id } = useParams() as GameParams // Retorna um objeto | Usamos o as GameParams para poder tipar o id com o type do GameParams
+
+  const { data: game } = useGetJogoQuery(id) //colocamos ! depois do ID para informar que é um valor OBRIGATÓRIO, para não retornar undefined
 
   if (!game) {
-    return <h3>Carregando...</h3>
+    return <Loader />
   }
 
   return (

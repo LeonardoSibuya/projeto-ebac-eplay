@@ -1,13 +1,14 @@
-import { ButtonContainer, ButtonLink } from './styles'
+import * as S from './styles'
 
 //Aqui criei a tipagem para poder criar botões que serão realmente botões recebendo o onClick(), e outros serão links, recebendo o to:'/'
 export type Props = {
-  type: 'button' | 'link'
+  type: 'button' | 'link' | 'submit'
   title: string
   to?: string
   onClick?: () => void //Aqui informa que a tipagem permite receber uma função que não tem argumentos
   children: string
-  variant: 'primary' | 'secundary'
+  variant?: 'primary' | 'secundary'
+  disabled?: boolean //booleano para podermos manipular se o botão está desabilitado após clicar em concluir a compra
 }
 
 const Button = ({
@@ -16,25 +17,27 @@ const Button = ({
   title,
   onClick,
   to,
-  variant = 'primary'
+  variant = 'primary',
+  disabled
 }: Props) => {
-  if (type === 'button') {
+  if (type === 'button' || type === 'submit') {
     return (
-      <ButtonContainer
-        type="button"
+      <S.ButtonContainer
+        type={type}
         title={title}
         onClick={onClick}
         variant={variant}
+        disabled={disabled}
       >
         {children}
-      </ButtonContainer>
+      </S.ButtonContainer>
     )
   }
 
   return (
-    <ButtonLink to={to as string} title={title}>
+    <S.ButtonLink to={to as string} title={title}>
       {children}
-    </ButtonLink>
+    </S.ButtonLink>
   )
 }
 

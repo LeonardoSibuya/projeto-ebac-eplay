@@ -1,13 +1,12 @@
 import { useState } from 'react'
 
 import Section from '../Section'
-import { GalleryItem } from '../../pages/Home'
 
-import { Item, ItemsList, Action, Modal, ModalContent } from './styles'
+import * as S from './styles'
 
 import play from '../../assets/images/play.png'
 import zoom from '../../assets/images/zoom.png'
-import fechar from '../../assets/images/fechar.png'
+import closeIcon from '../../assets/images/fechar.png'
 
 //Aqui estamos extendendo/reaproveitando as propriedades da tipagem GalleryItem e acrescentando o estaVisivel: boolean
 interface ModalState extends GalleryItem {
@@ -56,10 +55,10 @@ const Gallery = ({ defaultCover, name, items }: Props) => {
   return (
     <>
       <Section title={'Galeria'} background={'black'}>
-        <ItemsList>
+        <S.ItemsList>
           {/* aqui fazemos o map da const de array de objetos mock que criamos acima, e recuperamos a mídia e o index dos itens */}
           {items.map((media, index) => (
-            <Item
+            <S.Item
               key={media.url}
               onClick={() => {
                 setModal({
@@ -73,25 +72,25 @@ const Gallery = ({ defaultCover, name, items }: Props) => {
                 src={getMediaCover(media)}
                 alt={`media ${index + 1} de ${name}`}
               />
-              <Action>
+              <S.Action>
                 <img
                   src={getMediaIcon(media)}
                   alt="clique para maximizar a mídia"
                 />
-              </Action>
-            </Item>
+              </S.Action>
+            </S.Item>
           ))}
-        </ItemsList>
+        </S.ItemsList>
       </Section>
 
       {/* Modal é para ao clicar na imagem ela expandir na tela toda, e neste caso o Modal é o container geral da imagem, e recebe um useState para definir se o modal está visivel ou não, atráves da classe 'visivel' */}
-      <Modal className={modal.estaVisivel ? 'visivel' : ''}>
+      <S.Modal className={modal.estaVisivel ? 'visivel' : ''}>
         {/* ModalContent é o container do conteudo, seja da imagem que será aberta, e do header como nome do jogo e o botão de fechar a imagem */}
-        <ModalContent className="container">
+        <S.ModalContent className="container">
           <header>
             <h4>{name}</h4>
             <img
-              src={fechar}
+              src={closeIcon}
               alt="icone de fechar"
               // aqui estamos informando que ao clicar, mudamos o estado do modal atraves do setModal, paar fechar a imagem
               onClick={closeModal}
@@ -103,11 +102,11 @@ const Gallery = ({ defaultCover, name, items }: Props) => {
           ) : (
             <iframe src={modal.url} frameBorder={0}></iframe>
           )}
-        </ModalContent>
+        </S.ModalContent>
 
         {/* Criamos esta div de overlay para escurecer o conteudo do site atras da imagem aberta */}
         <div className="overlay" onClick={closeModal}></div>
-      </Modal>
+      </S.Modal>
     </>
   )
 }

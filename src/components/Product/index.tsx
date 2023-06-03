@@ -1,4 +1,4 @@
-import { Card, Titulo, Descricao, Infos } from './styles'
+import * as S from './styles'
 
 import Tag from '../Tag'
 
@@ -24,26 +24,29 @@ const Product = ({
   id
 }: Props) => {
   //aqui é uma função para delimitar o tamanho da descricao do jogo, onde se passar de 95 caracteres, iremos cortar depois do 92 e acrescenter ..., se não, irá retornar a descrição completa, caso não seja maior que 95
-  const getDescricao = (descricao: string) => {
-    if (descricao.length > 95) {
-      return descricao.slice(0, 92) + '...'
+  const getDescription = (text: string) => {
+    if (text.length > 95) {
+      return text.slice(0, 92) + '...'
     }
-    return descricao
+    return text
   }
 
   return (
-    <Card to={`/product/${id}`}>
+    <S.Card
+      title={`Clique aqui para ver mais detalhes do jogo: ${title}`}
+      to={`/product/${id}`}
+    >
       <img src={image} alt={title} />
-      <Infos>
+      <S.Infos>
         {infos.map((i) => (
           <Tag key={i}>{i}</Tag>
         ))}
-      </Infos>
-      <Titulo>{title}</Titulo>
+      </S.Infos>
+      <S.Title>{title}</S.Title>
       <Tag>{category}</Tag>
       <Tag>{system}</Tag>
-      <Descricao>{getDescricao(description)}</Descricao>
-    </Card>
+      <S.Description>{getDescription(description)}</S.Description>
+    </S.Card>
   )
 }
 

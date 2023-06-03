@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Game } from '../../pages/Home'
 
 //aqui criamos um estado para o slice, que é um items do tipo Game array que criamos anteriormente
 type CartState = {
@@ -46,6 +45,9 @@ const cartSlice = createSlice({
     },
     close: (state) => {
       state.isOpen = false
+    },
+    clearCart: (state) => {
+      state.items = []
     }
   }
 })
@@ -53,7 +55,7 @@ const cartSlice = createSlice({
 //AGORA TEMOS QUE EXPORTAR O SLICE QUE CRIAMOS E A FUNÇÃO DE ADICIONAR AO CARRINHO QUE CRIAMOS:
 
 //aqui estamos exportando a ação/função de adicionar ao carrinho
-export const { add, close, open, remove } = cartSlice.actions
+export const { add, close, open, remove, clearCart } = cartSlice.actions
 
 //aqui estamos exportando todo o slice deste reducer
 export default cartSlice.reducer

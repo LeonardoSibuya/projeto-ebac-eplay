@@ -1,22 +1,15 @@
+import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-
-import { RootReducer } from '../../store/index'
-
-import { close, remove } from '../../store/reducers/cart'
 
 import Button from '../Button'
 
-import {
-  Overlay,
-  CartContainer,
-  SideBar,
-  Prices,
-  Quantity,
-  CartItem
-} from './styles'
+import { RootReducer } from '../../store/index'
+import { close, remove } from '../../store/reducers/cart'
+
+import * as S from './styles'
 
 import Tag from '../Tag'
-import { formataPreco } from '../ProductsList'
+import { getTotalPrice, parseToBrl } from '../../utils'
 
 const Cart = () => {
   //utilizamos o useSelector, para poder utilizar os TYPE que criamos na store, e o state é do tipo RootReducer que criamos na store.
@@ -27,6 +20,8 @@ const Cart = () => {
   //aqui estamos utilizando o dispatch, para poder utilizar o reducer CLOSE que criamos no reducer de cart, que no caso o estado no CLOSE faz o TYPE isOpen ser FALSE, ou seja a barra lateral estara Fechada
   const dispatch = useDispatch()
 
+  const navigate = useNavigate()
+
   const closeCart = () => {
     dispatch(close())
   }
@@ -36,47 +31,58 @@ const Cart = () => {
     dispatch(remove(id))
   }
 
-  //Função para somar os preços dos jogos no carrinho
-  const getTotalPrice = () => {
-    //acumulador é o valor inicial que vai somando com o ValorAtual, que começa sendo 0
-    return items.reduce((acumulador, valorAtual) => {
-      return (acumulador += valorAtual.prices.current!) //conseguimos acessar o .prices.current, pois a função esta partindo de um reduce de items, que tem essas propriedades, pois é do tipo GAME
-    }, 0) //este zero é o valor inicial do valorAtual
+  //função para manipular o click do botão de continuar com a compra, onde colocamos os jogos no carrinho, e clicando em continuar será redirecionado para pagina de checkout
+  const goToChekout = () => {
+    navigate('/checkout') //USAMOS O NAVIGATE() DO REACT-ROUTER-DOM PARA PODER REDIRECIONAR O USUARIO PARA PAGINA DO CHECKOUT AO CLICAR NO BOTÃO
+    closeCart()
   }
 
   return (
     //Aqui no CartContainer estamos informando que caso o estado isOpen que é um booleano que criamos nos reducers, seja true, então adiciona a classe is-open, que criamos no style.ts, para o componente receber o display: flex
-    <CartContainer className={isOpen ? 'is-open' : ''}>
-      <Overlay onClick={closeCart} />
-      <SideBar>
-        <ul>
-          {items.map((jogo) => (
-            <CartItem key={jogo.id}>
-              <img src={jogo.media.thumbnail} alt={jogo.name} />
-              <div>
-                <h3>{jogo.name}</h3>
-                <Tag>{jogo.details.category}</Tag>
-                <Tag>{jogo.details.system}</Tag>
-                <span>{formataPreco(jogo.prices.current)}</span>
-              </div>
-              <button type="button" onClick={() => removeItemCart(jogo.id)} />
-            </CartItem>
-          ))}
-        </ul>
-        <Quantity>{items.length} jogo(s) no carrinho</Quantity>
-        <Prices>
-          Total de R$ {formataPreco(getTotalPrice())}
-          <span>Em até 6x sem juros</span>
-        </Prices>
-        <Button
-          title="clique aqui para continuar com a compra"
-          type={'button'}
-          variant={'primary'}
-        >
-          Continuar com a compra
-        </Button>
-      </SideBar>
-    </CartContainer>
+    <S.CartContainer className={isOpen ? 'is-open' : ''}>
+      <S.Overlay onClick={closeCart} />
+      <S.SideBar>
+        {items.length > 0 ? (
+          <>
+            <ul>
+              {items.map((jogo) => (
+                <S.CartItem key={jogo.id}>
+                  <img src={jogo.media.thumbnail} alt={jogo.name} />
+                  <div>
+                    <h3>{jogo.name}</h3>
+                    <Tag>{jogo.details.category}</Tag>
+                    <Tag>{jogo.details.system}</Tag>
+                    <span>{parseToBrl(jogo.prices.current)}</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => removeItemCart(jogo.id)}
+                  />
+                </S.CartItem>
+              ))}
+            </ul>
+            <S.Quantity>{items.length} jogo(s) no carrinho</S.Quantity>
+            <S.Prices>
+              Total de R$ {parseToBrl(getTotalPrice(items))}
+              <span>Em até 6x sem juros</span>
+            </S.Prices>
+            <Button
+              title="clique aqui para continuar com a compra"
+              type={'button'}
+              variant={'primary'}
+              onClick={goToChekout}
+            >
+              Continuar com a compra
+            </Button>
+          </>
+        ) : (
+          <p className="empty-text">
+            O carrinho está vazio, adicione pelo menos um produto para continuar
+            com a compra
+          </p>
+        )}
+      </S.SideBar>
+    </S.CartContainer>
   )
 }
 
